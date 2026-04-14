@@ -42,3 +42,6 @@ jobs:
           tags: ${{ env.IMAGE_NAME }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+kubeadm join 192.168.56.101:6443 --token ojd9zl.1itobn2v4u13xrh6 \
+	--discovery-token-ca-cert-hash sha256:7f4b596ad721f6a667b3fa0d2180d491aef9c516bec06817665b72b8789498ac
