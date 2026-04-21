@@ -1,1 +1,19 @@
-kubeadm join 10.0.3.15:6443 --token e3cf1l.dy7c8rp0s3hrkv0g --discovery-token-ca-cert-hash sha256:69b47a7827e1fec53fd720a44830a09a0251e5267be51f1e1d719ee3c431c3b7 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whoami-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: whoami
+  template:
+    metadata:
+      labels:
+        app: whoami
+    spec:
+      containers:
+      - name: whoami
+        image: traefik/whoami:latest
+        ports:
+        - containerPort: 80
