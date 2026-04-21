@@ -1,14 +1,1 @@
-
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.31.4/manifests/operator-crds.yaml
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.31.4/manifests/tigera-operator.yaml
-
-curl -O https://raw.githubusercontent.com/projectcalico/calico/v3.31.4/manifests/custom-resources.yaml
-
-
-nano custom-resources.yaml
-
-
-kubectl create -f custom-resources.yaml
-watch kubectl get pods -n calico-system
-
-kubectl get nodes
+kubeadm join 10.0.3.15:6443 --token e3cf1l.dy7c8rp0s3hrkv0g --discovery-token-ca-cert-hash sha256:69b47a7827e1fec53fd720a44830a09a0251e5267be51f1e1d719ee3c431c3b7 
