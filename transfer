@@ -15,3 +15,7 @@ mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+
+
+kubeadm join 10.74.47.215:6443 --token h84w02.u4c2hzev17so9exr \
+	--discovery-token-ca-cert-hash sha256:2fec33586f9f54efea7e658974a1756d85d5f58d4eee79d6a2ba3f82c5288dda 
