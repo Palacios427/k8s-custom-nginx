@@ -25,3 +25,7 @@ kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 
 
 kubectl get nodes -o wide
+
+
+kubeadm join 10.74.47.215:6443 --token 1ximw2.i3f9mzk48x8xuip8 \
+	--discovery-token-ca-cert-hash sha256:482a9a1cedc53bb442725886582fd76e0f0b9f28f287de979eae3850b23b5dd0 
