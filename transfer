@@ -1,17 +1,2 @@
-sudo kubeadm reset -f
-rm -rf $HOME/.kube
-sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
-
-
-sudo kubeadm init --pod-network-cidr=172.16.0.0/16 --cri-socket=unix:///run/containerd/containerd.sock --apiserver-advertise-address=0.0.0.0
-
-
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-
-kubectl taint nodes --all node-role.kubernetes.io/control-plane-
-
-
-kubeadm token create --print-join-command
+kubeadm join 10.74.47.215:6443 --token 6x4y3w.xcl382eo2zy7avef \
+	--discovery-token-ca-cert-hash sha256:d3eb43636bfa6a17dec5f130be9d6d2dffc1b3a466e604d5bd6de6a6a7bbf2d8 
