@@ -1,18 +1,17 @@
-ubuntu@ubuntu-VirtualBox:~$ kubectl get pods -n kube-system
-NAME                                        READY   STATUS    RESTARTS   AGE
-coredns-7d764666f9-2zl5b                    1/1     Running   0          20m
-coredns-7d764666f9-bnp9b                    1/1     Running   0          20m
-etcd-ubuntu-virtualbox                      1/1     Running   2          20m
-kube-apiserver-ubuntu-virtualbox            1/1     Running   2          20m
-kube-controller-manager-ubuntu-virtualbox   1/1     Running   2          20m
-kube-proxy-fn22n                            1/1     Running   0          20m
-kube-scheduler-ubuntu-virtualbox            1/1     Running   2          20m
-ubuntu@ubuntu-VirtualBox:~$ sudo ss -tlnp | grep 6443
-[sudo] password for ubuntu: 
-LISTEN 0      4096               *:6443             *:*    users:(("kube-apiserver",pid=5582,fd=4))                 
-ubuntu@ubuntu-VirtualBox:~$ sudo ufw status
-Status: inactive
-ubuntu@ubuntu-VirtualBox:~$ kubectl get nodes
-NAME                STATUS   ROLES           AGE   VERSION
-ubuntu-virtualbox   Ready    control-plane   21m   v1.35.3
-ubuntu@ubuntu-VirtualBox:~$ 
+sudo kubeadm reset -f
+rm -rf $HOME/.kube
+sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
+
+
+sudo kubeadm init --pod-network-cidr=172.16.0.0/16 --cri-socket=unix:///run/containerd/containerd.sock --apiserver-advertise-address=0.0.0.0
+
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+
+kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+
+
+kubeadm token create --print-join-command
