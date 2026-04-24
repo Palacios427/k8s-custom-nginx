@@ -1,1 +1,21 @@
-kubeadm join 10.0.3.15:6443 --token 8fb5z7.xlb62iaz31bls40y --discovery-token-ca-cert-hash sha256:69b47a7827e1fec53fd720a44830a09a0251e5267be51f1e1d719ee3c431c3b7 
+cat <<EOF > custom-resources.yaml
+apiVersion: operator.tigera.io/v1
+kind: Installation
+metadata:
+  name: default
+spec:
+  calicoNetwork:
+    ipPools:
+    - name: default-ipv4-ippool
+      blockSize: 26
+      cidr: 172.16.0.0/16
+      encapsulation: VXLANCrossSubnet
+      natOutgoing: Enabled
+      nodeSelector: all()
+---
+apiVersion: operator.tigera.io/v1
+kind: APIServer
+metadata:
+  name: default
+spec: {}
+EOF
