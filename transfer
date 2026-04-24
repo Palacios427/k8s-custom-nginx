@@ -1,21 +1,31 @@
-sudo kubeadm reset -f
-rm -rf $HOME/.kube
-sudo rm -rf /etc/kubernetes/manifests/
-sudo rm -rf /etc/kubernetes/pki/
-sudo rm -rf /var/lib/calico
-sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
-sudo systemctl restart containerd
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.31.4/manifests/operator-crds.yaml
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.31.4/manifests/tigera-operator.yaml
 
 
-sudo swapoff -a
-sudo kubeadm init --pod-network-cidr=172.16.0.0/16 --cri-socket=unix:///run/containerd/containerd.sock --apiserver-advertise-address=10.74.47.215
+cat <<EOF > custom-resources.yaml
+apiVersion: operator.tigera.io/v1
+kind: Installation
+metadata:
+  name: default
+spec:
+  calicoNetwork:
+    ipPools:
+    - name: default-ipv4-ippool
+      blockSize: 26
+      cidr: 172.16.0.0/16
+      encapsulation: VXLANCrossSubnet
+      natOutgoing: Enabled
+      nodeSelector: all()
+---
+apiVersion: operator.tigera.io/v1
+kind: APIServer
+metadata:
+  name: default
+spec: {}
+EOF
+kubectl create -f custom-resources.yaml
 
 
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+watch kubectl get pods -n calico-system
 
-
-kubeadm join 10.74.47.215:6443 --token h84w02.u4c2hzev17so9exr \
-	--discovery-token-ca-cert-hash sha256:2fec33586f9f54efea7e658974a1756d85d5f58d4eee79d6a2ba3f82c5288dda 
+kubectl get nodes
