@@ -1,2 +1,29 @@
-kubeadm join 10.74.47.215:6443 --token 6x4y3w.xcl382eo2zy7avef \
-	--discovery-token-ca-cert-hash sha256:d3eb43636bfa6a17dec5f130be9d6d2dffc1b3a466e604d5bd6de6a6a7bbf2d8 
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.31.4/manifests/operator-crds.yaml
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.31.4/manifests/tigera-operator.yaml
+
+
+cat <<EOF > custom-resources.yaml
+apiVersion: operator.tigera.io/v1
+kind: Installation
+metadata:
+  name: default
+spec:
+  calicoNetwork:
+    ipPools:
+    - name: default-ipv4-ippool
+      blockSize: 26
+      cidr: 172.16.0.0/16
+      encapsulation: VXLANCrossSubnet
+      natOutgoing: Enabled
+      nodeSelector: all()
+---
+apiVersion: operator.tigera.io/v1
+kind: APIServer
+metadata:
+  name: default
+spec: {}
+EOF
+
+kubectl create -f custom-resources.yaml
+
+watch kubectl get pods -n calico-system
