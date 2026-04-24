@@ -1,2 +1,18 @@
-kubeadm join 10.0.3.15:6443 --token arm3z1.1prz8pb2v98tjchv \
-	--discovery-token-ca-cert-hash sha256:e0064f6491b2242bd16b73d81a39a7dd3329ff4a323ab4023cb039b0b5b34661 
+ubuntu@ubuntu-VirtualBox:~$ kubectl get pods -n kube-system
+NAME                                        READY   STATUS    RESTARTS   AGE
+coredns-7d764666f9-2zl5b                    1/1     Running   0          20m
+coredns-7d764666f9-bnp9b                    1/1     Running   0          20m
+etcd-ubuntu-virtualbox                      1/1     Running   2          20m
+kube-apiserver-ubuntu-virtualbox            1/1     Running   2          20m
+kube-controller-manager-ubuntu-virtualbox   1/1     Running   2          20m
+kube-proxy-fn22n                            1/1     Running   0          20m
+kube-scheduler-ubuntu-virtualbox            1/1     Running   2          20m
+ubuntu@ubuntu-VirtualBox:~$ sudo ss -tlnp | grep 6443
+[sudo] password for ubuntu: 
+LISTEN 0      4096               *:6443             *:*    users:(("kube-apiserver",pid=5582,fd=4))                 
+ubuntu@ubuntu-VirtualBox:~$ sudo ufw status
+Status: inactive
+ubuntu@ubuntu-VirtualBox:~$ kubectl get nodes
+NAME                STATUS   ROLES           AGE   VERSION
+ubuntu-virtualbox   Ready    control-plane   21m   v1.35.3
+ubuntu@ubuntu-VirtualBox:~$ 
