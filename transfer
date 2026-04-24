@@ -27,3 +27,84 @@ EOF
 kubectl create -f custom-resources.yaml
 
 watch kubectl get pods -n calico-system
+
+
+ubuntu@ubuntu-VirtualBox:~$ kubectl describe pod -n tigera-operator
+Name:             tigera-operator-6cf4cccc57-v8smc
+Namespace:        tigera-operator
+Priority:         0
+Service Account:  tigera-operator
+Node:             vbox/10.0.3.15
+Start Time:       Fri, 24 Apr 2026 12:18:11 -0600
+Labels:           k8s-app=tigera-operator
+                  name=tigera-operator
+                  pod-template-hash=6cf4cccc57
+Annotations:      <none>
+Status:           Running
+IP:               10.0.3.15
+IPs:
+  IP:           10.0.3.15
+Controlled By:  ReplicaSet/tigera-operator-6cf4cccc57
+Containers:
+  tigera-operator:
+    Container ID:  containerd://05993e269be3685bc6d32181f8f43857fb5a649c6ddcda01cbec0e0f9b3201e5
+    Image:         quay.io/tigera/operator:v1.40.7
+    Image ID:      quay.io/tigera/operator@sha256:53260704fc6e638633b243729411222e01e1898647352a6e1a09cc046887973a
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      operator
+    Args:
+      -manage-crds=true
+    State:          Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Fri, 24 Apr 2026 12:18:39 -0600
+      Finished:     Fri, 24 Apr 2026 12:19:01 -0600
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Fri, 24 Apr 2026 12:18:11 -0600
+      Finished:     Fri, 24 Apr 2026 12:18:38 -0600
+    Ready:          False
+    Restart Count:  1
+    Environment Variables from:
+      kubernetes-services-endpoint  ConfigMap  Optional: true
+    Environment:
+      WATCH_NAMESPACE:                     
+      POD_NAME:                            tigera-operator-6cf4cccc57-v8smc (v1:metadata.name)
+      OPERATOR_NAME:                       tigera-operator
+      TIGERA_OPERATOR_INIT_IMAGE_VERSION:  v1.40.7
+    Mounts:
+      /var/lib/calico from var-lib-calico (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-vbpdh (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  var-lib-calico:
+    Type:          HostPath (bare host directory volume)
+    Path:          /var/lib/calico
+    HostPathType:  
+  kube-api-access-vbpdh:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              kubernetes.io/os=linux
+Tolerations:                 :NoExecute op=Exists
+                             :NoSchedule op=Exists
+Events:
+  Type     Reason     Age                From               Message
+  ----     ------     ----               ----               -------
+  Normal   Scheduled  2m45s              default-scheduler  Successfully assigned tigera-operator/tigera-operator-6cf4cccc57-v8smc to vbox
+  Normal   Pulled     32s (x2 over 60s)  kubelet            spec.containers{tigera-operator}: Container image "quay.io/tigera/operator:v1.40.7" already present on machine and can be accessed by the pod
+  Normal   Created    32s (x2 over 60s)  kubelet            spec.containers{tigera-operator}: Container created
+  Normal   Started    32s (x2 over 60s)  kubelet            spec.containers{tigera-operator}: Container started
+  Warning  BackOff    9s                 kubelet            spec.containers{tigera-operator}: Back-off restarting failed container tigera-operator in pod tigera-operator-6cf4cccc57-v8smc_tigera-operator(35e20796-7c69-4c07-a822-93fe0fcb218a)
