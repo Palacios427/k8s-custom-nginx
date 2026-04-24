@@ -1,21 +1,2 @@
-cat <<EOF > custom-resources.yaml
-apiVersion: operator.tigera.io/v1
-kind: Installation
-metadata:
-  name: default
-spec:
-  calicoNetwork:
-    ipPools:
-    - name: default-ipv4-ippool
-      blockSize: 26
-      cidr: 172.16.0.0/16
-      encapsulation: VXLANCrossSubnet
-      natOutgoing: Enabled
-      nodeSelector: all()
----
-apiVersion: operator.tigera.io/v1
-kind: APIServer
-metadata:
-  name: default
-spec: {}
-EOF
+kubeadm join 10.0.3.15:6443 --token arm3z1.1prz8pb2v98tjchv \
+	--discovery-token-ca-cert-hash sha256:e0064f6491b2242bd16b73d81a39a7dd3329ff4a323ab4023cb039b0b5b34661 
