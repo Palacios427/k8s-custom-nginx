@@ -1,3 +1,17 @@
-ubuntu@ubuntu-VirtualBox:~$ kubectl logs -n tigera-operator tigera-operator-6cf4cccc57-v8smc
-Error from server: Get "https://10.0.3.15:10250/containerLogs/tigera-operator/tigera-operator-6cf4cccc57-v8smc/tigera-operator": dial tcp 10.0.3.15:10250: i/o timeout
-ubuntu@ubuntu-VirtualBox:~$ 
+sudo kubeadm reset -f
+rm -rf $HOME/.kube
+sudo rm -rf /etc/kubernetes/manifests/
+sudo rm -rf /etc/kubernetes/pki/
+sudo rm -rf /var/lib/calico
+sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
+sudo systemctl restart containerd
+
+
+sudo swapoff -a
+sudo kubeadm init --pod-network-cidr=172.16.0.0/16 --cri-socket=unix:///run/containerd/containerd.sock --apiserver-advertise-address=10.74.47.215
+
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+kubectl taint nodes --all node-role.kubernetes.io/control-plane-
